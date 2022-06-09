@@ -4,22 +4,8 @@ import recipeView from "./veiws/recipeView.js";
 import icons from 'url:../img/icons.svg'
 import "core-js/stable";
 import "regenerator-runtime/runtime"
-
-const recipeContainer = document.querySelector('.recipe');
-
-const timeout = function (s) {
-  return new Promise(function (_, reject) {
-    setTimeout(function () {
-      reject(new Error(`Request took too long! Timeout after ${s} second`));
-    }, s * 1000);
-  });
-};
-
-// https://forkify-api.herokuapp.com/v2
-
-///////////////////////////////////////
-
-
+import SearchView from "./veiws/searchView";
+import searchView from "./veiws/searchView";
 
 const controlRecipes = async function(){
   try{
@@ -36,10 +22,25 @@ const controlRecipes = async function(){
     recipeView.render(model.state.recipe)
 
   }catch (err){
-    alert(err)
+    recipeView.renderError('We could not find that recipe. Please try another one!')
   }
 }
 
+const controlSearchResults = async function(){
+  try{
+    // 1) Get search query
+    const query = SearchView.getQuery()
+    if(!query) return
 
-const events = ['hashchange', 'load']
-events.forEach(ev => window.addEventListener(ev, controlRecipes))
+    // 2) load results
+    await model.loadSearchResults(query)
+  }catch (err){
+    console.log(err)
+  }
+}
+
+const init = function (){
+  recipeView.addHandlerRender(controlRecipes)
+  searchView.addHandlerSearch(controlSearchResults)
+}
+init();

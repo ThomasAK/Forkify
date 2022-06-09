@@ -25,6 +25,25 @@ class RecipeView {
         this.#parentElement.insertAdjacentHTML('afterbegin', markup);
     }
 
+    renderError(message){
+        const markup = `<div class="error">
+            <div>
+              <svg>
+                <use href="${icons}#icon-alert-triangle"></use>
+              </svg>
+            </div>
+            <p>${message}</p>
+          </div>`
+        this.#clear()
+        this.#parentElement.insertAdjacentHTML('afterbegin', markup)
+    }
+
+a
+
+    addHandlerRender(handler){
+        ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, handler))
+    }
+
     #generateMarkup(){
         return `<figure class="recipe__fig">
           <img src="${this.#data.image}" alt="${this.#data.title}" class="recipe__img" />
